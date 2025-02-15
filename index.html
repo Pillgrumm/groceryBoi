@@ -16,10 +16,12 @@
 
         <div class="input-section">
             <input type="text" id="grocery-item" placeholder="Enter an item...">
+            <input type="number" id="amount" placeholder="Amount" step="any">
             <button onclick="addItem()">Add</button>
         </div>
 
         <ul id="grocery-list"></ul>
+        <p id="total">Total: $0.00</p>
         <button class="clear-btn" onclick="clearList()">Clear List</button>
     </div>
 

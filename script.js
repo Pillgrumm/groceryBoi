@@ -1,60 +1,65 @@
-document.addEventListener("DOMContentLoaded", loadItems);
+let groceryList = [];  // In-memory data structure to hold items
 
 function addItem() {
-    const input = document.getElementById("grocery-item");  // Ensure the id matches
-    const itemText = input.value.trim();
-    
-    if (itemText === "") {
-        console.log("Input is empty, nothing to add.");
-        return;  // If input is empty, do nothing
-    }
+    const itemInput = document.getElementById("grocery-item");
+    const amountInput = document.getElementById("amount");
+    const itemText = itemInput.value.trim();
+    const amount = parseFloat(amountInput.value.trim());
 
-    console.log("Adding item:", itemText);
-    
-    const item = { text: itemText, bought: false };
-    saveItem(item);
-    
-    input.value = "";  // Clear the input field after adding
-    renderList();
-}
+    if (itemText === "" || isNaN(amount) || amount <= 0) return; // Check if item or amount is valid
 
-function saveItem(item) {
-    let items = JSON.parse(localStorage.getItem("groceryList")) || [];
-    items.push(item);
-    localStorage.setItem("groceryList", JSON.stringify(items));
-    console.log("Saved items:", items);  // Log saved items for debugging
-}
+    const item = { text: itemText, bought: false, amount: amount };
+    groceryList.push(item);  // Add the item to the in-memory list
 
-function loadItems() {
-    console.log("Loading items...");
+    itemInput.value = "";
+    amountInput.value = "";
     renderList();
 }
 
 function renderList() {
-    const list = document.getElementById("grocery-list");  // Ensure the id matches
+    const list = document.getElementById("grocery-list");
     list.innerHTML = "";
-    const items = JSON.parse(localStorage.getItem("groceryList")) || [];
-    
-    items.forEach((item, index) => {
+    let total = 0;
+
+    groceryList.forEach((item, index) => {
         const li = document.createElement("li");
-        li.textContent = item.text;
+        li.textContent = `${item.text} - $${item.amount.toFixed(2)}`;
+
         if (item.bought) li.classList.add("checked");
 
         li.onclick = () => toggleItem(index);
-        
+
+        // Add a remove button to each item
+        const removeBtn = document.createElement("button");
+        removeBtn.textContent = "Remove";
+        removeBtn.classList.add("remove-btn");
+        removeBtn.onclick = (e) => {
+            e.stopPropagation(); // Prevent triggering the item click event
+            removeItem(index);
+        };
+
+        li.appendChild(removeBtn);
         list.appendChild(li);
+        total += item.amount;
     });
-    console.log("Rendered list:", items);  // Log rendered items for debugging
+
+    // Update the total
+    const totalDisplay = document.getElementById("total");
+    totalDisplay.textContent = `Total: $${total.toFixed(2)}`;
 }
 
 function toggleItem(index) {
-    let items = JSON.parse(localStorage.getItem("groceryList"));
-    items[index].bought = !items[index].bought;
-    localStorage.setItem("groceryList", JSON.stringify(items));
+    groceryList[index].bought = !groceryList[index].bought;
     renderList();
 }
 
 function clearList() {
-    localStorage.removeItem("groceryList");
+    groceryList = [];  // Clear the in-memory list
     renderList();
+}
+
+// New function to remove an item
+function removeItem(index) {
+    groceryList.splice(index, 1);  // Remove item at the given index
+    renderList();  // Re-render the list
 }
