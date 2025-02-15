@@ -127,6 +127,7 @@ li.checked {
 .footer-icon i {
     font-size: 2rem;
 }
+
 /* Remove button */
 .remove-btn {
     background-color: #ff4d4d;
@@ -141,4 +142,59 @@ li.checked {
 
 .remove-btn:hover {
     background-color: #cc0000;
+}
+
+/* Mobile Responsiveness */
+
+/* For devices with a max-width of 768px (tablets and below) */
+@media (max-width: 768px) {
+    .input-section {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    input, button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    button {
+        flex: 1;
+        font-size: 16px;
+    }
+
+    .clear-btn {
+        width: 100%;
+        font-size: 16px;
+    }
+
+    .footer-wrapper {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .footer-icon i {
+        font-size: 1.5rem;
+    }
+}
+
+/* For smaller mobile screens */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    li {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .remove-btn {
+        font-size: 10px;
+    }
 }
